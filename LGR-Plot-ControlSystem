@@ -1,0 +1,28 @@
+import numpy as np
+import control as ctrl
+import matplotlib.pyplot as plt
+import matplotlib
+
+# Configurar o backend interativo para VS Code
+matplotlib.use('Qt5Agg')  # Ou 'TkAgg' dependendo do suporte
+
+                              
+s = ctrl.TransferFunction.s
+G = 1 * (s + 2.5) * (s + 0.33) / (s * (s + 0.5) * (s + 8.63) * (s + 0.1) )
+
+# Gerar o gráfico de Root Locus
+rlocus_data = ctrl.root_locus(G, grid=True)  # Gera o gráfico automaticamente
+
+# A função root_locus já plota o gráfico, mas não retorna os ganhos diretamente
+# Caso queira interatividade, você pode utilizar a função abaixo:
+def onclick(event):
+    """Função de callback para eventos de clique no gráfico."""
+    x, y = event.xdata, event.ydata
+    if x is not None and y is not None:
+        print(f"Clique detectado em: Real={x}, Imag={y}")
+
+fig = plt.gcf()
+fig.canvas.mpl_connect('button_press_event', onclick)
+
+# Mostrar o gráfico (mantém interatividade no VS Code)
+plt.show(block=True)
